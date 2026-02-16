@@ -1,0 +1,144 @@
+---
+description: Rules and patterns for the @d3charts/react chart library
+globs: packages/chart-lib/**/*
+---
+
+# @d3charts/react — AI coding rules
+
+## Architecture principles
+
+- **React owns the DOM.** All SVG elements are created via JSX. Never use `d3-selection`, `d3-transition`, or `d3-axis`.
+- **D3 for math only.** Use `d3-scale`, `d3-shape`, and `d3-array` for computation. Pass results to React for rendering.
+- **SVG-first.** Charts render `<svg>` elements. No Canvas or WebGL.
+- **Dependencies flow downward.** Charts → Shared primitives → Utilities → Types/Hooks → D3 modules. Never import upward.
+
+## File conventions
+
+### Directory structure
+
+```
+src/components/ChartName/
+  ChartName.tsx           # Component source
+  ChartName.test.tsx      # Tests
+  ChartName.stories.tsx   # Storybook stories
+```
+
+### Naming
+
+- **PascalCase** for components and their directories.
+- **camelCase** for utility files and hooks.
+- **Named exports only** — no default exports (except Storybook `meta`).
+
+### Barrel exports
+
+Only `src/index.ts` is the public API. Add every new component, type, and hook to it. Do not create nested barrel files.
+
+### Colocation
+
+Tests and stories always live next to their component file, never in separate directories.
+
+## Component implementation pattern
+
+Every chart component must follow this structure:
+
+```tsx
+'use client'
+
+import type { Margin } from '../../types'
+// D3 imports for math only
+
+export interface ChartNameProps {
+  /** JSDoc comment for every prop */
+  data: DataType[]
+  width: number
+  height: number
+  margin?: Margin
+  ariaLabel?: string
+}
+
+const DEFAULT_MARGIN: Margin = { top: 20, right: 20, bottom: 40, left: 50 }
+
+export function ChartName({
+  data,
+  width,
+  height,
+  margin = DEFAULT_MARGIN,
+  ariaLabel = 'Chart name',
+}: ChartNameProps) {
+  const innerWidth = width - margin.left - margin.right
+  const innerHeight = height - margin.top - margin.bottom
+
+  // 1. Build D3 scales
+  // 2. Generate ticks
+  // 3. Create shape generators (if needed)
+
+  return (
+    <svg width={width} height={height} role="img" aria-label={ariaLabel}>
+      <desc>{ariaLabel}</desc>
+      <g transform={`translate(${margin.left}, ${margin.top})`}>{/* Axes, data marks, legend */}</g>
+    </svg>
+  )
+}
+```
+
+## Props interface rules
+
+- Every prop must have a JSDoc comment.
+- Use shared types from `src/types/index.ts` (`Margin`, `DataPoint`, `LineSeries`, etc.).
+- Standard props present on all charts: `width`, `height`, `margin?`, `ariaLabel?`.
+- Component-specific props interfaces are exported from the component file and re-exported from `src/index.ts`.
+- Use generics when the data shape is flexible (see `BarChartProps<D>`).
+
+## Accessibility requirements (non-negotiable)
+
+Every chart component **must** have all of the following:
+
+- [ ] `<svg role="img" aria-label={ariaLabel}>`
+- [ ] `<desc>{ariaLabel}</desc>` as the first child of `<svg>`
+- [ ] `<title>` on every data mark element (`<rect>`, `<path>`, `<circle>`) with human-readable text
+- [ ] Text elements use `fill="currentColor"` to inherit the host colour scheme
+- [ ] The `ariaLabel` prop defaults to a descriptive string (e.g., `'Bar chart'`)
+
+## Testing standards
+
+Required test cases for every chart component:
+
+1. Renders an SVG with correct `role="img"` and `aria-label`.
+2. Renders the correct number of data marks (rects, paths, circles).
+3. Applies custom margins (check the inner `<g>` transform attribute).
+4. Supports a custom `ariaLabel` prop.
+5. Handles edge cases: empty data array, single data item.
+
+Use **Vitest** + **@testing-library/react**. Test file lives next to the component.
+
+## Storybook standards
+
+- Include `tags: ['autodocs']` in story meta for automatic docs generation.
+- Set `parameters: { layout: 'centered' }`.
+- Define `argTypes` with appropriate controls (range sliders for dimensions, select for modes, boolean for flags).
+- Include at least: a `Default` story and one meaningful variant.
+- Story meta uses `title: 'Charts/ChartName'`.
+
+## New chart checklist
+
+When adding a new chart type, complete every step:
+
+1. Create `src/components/ChartName/` directory.
+2. Create `ChartName.tsx` following the component pattern above.
+3. Add `'use client'` directive.
+4. Define and export `ChartNameProps` with JSDoc on all props.
+5. Implement accessibility (role, aria-label, desc, title elements).
+6. Create `ChartName.test.tsx` covering all required test cases.
+7. Create `ChartName.stories.tsx` with autodocs and argTypes.
+8. Export component and props from `src/index.ts`.
+9. Add any new shared types to `src/types/index.ts`.
+10. Create `src/components/ChartName/README.md`.
+
+## Code style
+
+- No semicolons (project uses no-semicolon style).
+- Single quotes for strings.
+- Use `const` for values that don't change, `function` declarations for components and named functions.
+- Avoid inline styles except for SVG attributes that are inherently inline (e.g., `transform`).
+- Prefer computed values over mutable state — charts are pure functions of their props.
+- Use `??` for nullish fallbacks, not `||`, when the value might be `0`.

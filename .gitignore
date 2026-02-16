@@ -4,4 +4,3 @@ dist
 .turbo
 *.tsbuildinfo
 storybook-static
-.cursor/
