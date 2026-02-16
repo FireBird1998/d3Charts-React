@@ -70,6 +70,12 @@ export function BarChart<
 
   const categories = data.map((d) => String(d[categoryKey]))
 
+  /**
+   * D3 band scale for horizontal positioning of categorical bars.
+   * - Maps each category to a band in the available width.
+   * - Evenly spaces bars and applies padding between them for visual separation.
+   * - Used as the x-axis scale in the bar chart.
+   */
   const xScale = scaleBand<string>().domain(categories).range([0, innerWidth]).padding(0.2)
 
   const xTicks = getBandTicks(xScale)
