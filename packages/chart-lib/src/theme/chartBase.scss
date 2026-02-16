@@ -1,0 +1,28 @@
+// chartBase.scss — CSS class definitions for SVG chart elements.
+// These classes are applied to SVG elements in shared components (axes, legend)
+// and are styled entirely through CSS custom properties injected by ChartThemeProvider.
+//
+// This file is the SCSS source of truth. The runtime equivalent lives in
+// baseStyles.ts as a static string (to avoid requiring consumers to import CSS).
+
+@use 'mixins' as *;
+
+.d3c-tick-text {
+  @include tick-text;
+}
+
+.d3c-axis-line {
+  @include axis-line;
+}
+
+.d3c-tick-line {
+  @include tick-line;
+}
+
+.d3c-grid-line {
+  @include grid-line;
+}
+
+.d3c-legend-text {
+  @include legend-text;
+}

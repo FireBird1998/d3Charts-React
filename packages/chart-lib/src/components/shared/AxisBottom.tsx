@@ -11,11 +11,11 @@ interface AxisBottomProps {
 export function AxisBottom({ ticks, height, width }: AxisBottomProps) {
   return (
     <g transform={`translate(0, ${height})`}>
-      <line x1={0} x2={width} stroke="currentColor" />
+      <line x1={0} x2={width} className="d3c-axis-line" />
       {ticks.map(({ value, offset }) => (
         <g key={String(value)} transform={`translate(${offset}, 0)`}>
-          <line y2={6} stroke="currentColor" />
-          <text y={9} dy="0.71em" textAnchor="middle" fill="currentColor" fontSize={12}>
+          <line y2={6} className="d3c-tick-line" />
+          <text y={9} dy="0.71em" textAnchor="middle" className="d3c-tick-text">
             {String(value)}
           </text>
         </g>

@@ -8,6 +8,7 @@ import { getBandTicks, getLinearTicks } from '../../utils/axes'
 import { AxisBottom } from '../shared/AxisBottom'
 import { AxisLeft } from '../shared/AxisLeft'
 import { Legend } from '../shared/Legend'
+import { useChartTheme } from '../../theme/useChartTheme'
 
 export interface BarChartProps<
   D extends Record<string, string | number> = Record<string, string | number>,
@@ -26,7 +27,7 @@ export interface BarChartProps<
   margin?: Margin
   /** Render bars side-by-side (grouped) or stacked */
   mode?: 'grouped' | 'stacked'
-  /** Per-key fill colors */
+  /** Per-key fill colors (takes precedence over theme palette) */
   colors?: Record<string, string>
   /** Accessible label describing the chart */
   ariaLabel?: string
@@ -34,22 +35,14 @@ export interface BarChartProps<
 
 const DEFAULT_MARGIN: Margin = { top: 20, right: 20, bottom: 40, left: 50 }
 
-const DEFAULT_PALETTE = [
-  '#4e79a7',
-  '#f28e2b',
-  '#e15759',
-  '#76b7b2',
-  '#59a14f',
-  '#edc948',
-  '#b07aa1',
-  '#ff9da7',
-  '#9c755f',
-  '#bab0ac',
-]
-
-function getColor(key: string, index: number, colors?: Record<string, string>): string {
+function getColor(
+  key: string,
+  index: number,
+  palette: string[],
+  colors?: Record<string, string>,
+): string {
   if (colors?.[key]) return colors[key]
-  return DEFAULT_PALETTE[index % DEFAULT_PALETTE.length]
+  return palette[index % palette.length]
 }
 
 export function BarChart<
@@ -65,24 +58,22 @@ export function BarChart<
   colors,
   ariaLabel = 'Bar chart',
 }: BarChartProps<D>) {
+  const theme = useChartTheme()
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
 
   const categories = data.map((d) => String(d[categoryKey]))
 
-  /**
-   * D3 band scale for horizontal positioning of categorical bars.
-   * - Maps each category to a band in the available width.
-   * - Evenly spaces bars and applies padding between them for visual separation.
-   * - Used as the x-axis scale in the bar chart.
-   */
   const xScale = scaleBand<string>().domain(categories).range([0, innerWidth]).padding(0.2)
 
   const xTicks = getBandTicks(xScale)
 
-  const colorMap = Object.fromEntries(keys.map((key, i) => [key, getColor(key, i, colors)]))
+  const colorMap = Object.fromEntries(
+    keys.map((key, i) => [key, getColor(key, i, theme.palette, colors)]),
+  )
 
   const showLegend = keys.length > 1
+  const rx = Number(theme.barBorderRadius)
 
   if (mode === 'stacked') {
     // --- Stacked mode ---
@@ -115,7 +106,7 @@ export function BarChart<
                     y={y1}
                     width={xScale.bandwidth()}
                     height={y0 - y1}
-                    rx={1}
+                    rx={rx}
                   >
                     <title>{`${category} — ${layer.key}: ${segment[1] - segment[0]}`}</title>
                   </rect>
@@ -165,7 +156,7 @@ export function BarChart<
                     width={xSubScale.bandwidth()}
                     height={innerHeight - yScale(value)}
                     fill={colorMap[key]}
-                    rx={2}
+                    rx={rx}
                   >
                     <title>{`${category} — ${key}: ${value}`}</title>
                   </rect>

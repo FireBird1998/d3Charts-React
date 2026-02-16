@@ -11,12 +11,12 @@ interface AxisLeftProps {
 export function AxisLeft({ ticks, width, height }: AxisLeftProps) {
   return (
     <g>
-      <line y1={0} y2={height} stroke="currentColor" />
+      <line y1={0} y2={height} className="d3c-axis-line" />
       {ticks.map(({ value, offset }) => (
         <g key={String(value)} transform={`translate(0, ${offset})`}>
-          <line x2={-6} stroke="currentColor" />
-          <line x2={width} stroke="#e0e0e0" strokeDasharray="2,2" />
-          <text x={-9} dy="0.32em" textAnchor="end" fill="currentColor" fontSize={12}>
+          <line x2={-6} className="d3c-tick-line" />
+          <line x2={width} className="d3c-grid-line" />
+          <text x={-9} dy="0.32em" textAnchor="end" className="d3c-tick-text">
             {String(value)}
           </text>
         </g>

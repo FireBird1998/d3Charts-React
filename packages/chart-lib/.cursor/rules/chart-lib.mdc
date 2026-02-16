@@ -11,6 +11,7 @@ globs: packages/chart-lib/**/*
 - **D3 for math only.** Use `d3-scale`, `d3-shape`, and `d3-array` for computation. Pass results to React for rendering.
 - **SVG-first.** Charts render `<svg>` elements. No Canvas or WebGL.
 - **Dependencies flow downward.** Charts → Shared primitives → Utilities → Types/Hooks → D3 modules. Never import upward.
+- **Theme-driven styling.** All visual properties (colors, fonts, sizes) come from the theme system. Never hardcode colors, font sizes, or font families in components.
 
 ## File conventions
 
@@ -21,6 +22,18 @@ src/components/ChartName/
   ChartName.tsx           # Component source
   ChartName.test.tsx      # Tests
   ChartName.stories.tsx   # Storybook stories
+
+src/theme/
+  tokens.ts               # ChartTheme interface + CSS var name map
+  defaultTheme.ts         # Light preset values
+  darkTheme.ts            # Dark preset values
+  ChartThemeProvider.tsx   # React context + <style> injection
+  useChartTheme.ts        # Hook: useChartTheme()
+  baseStyles.ts           # Static CSS class definitions (runtime string)
+  cssVarMap.scss           # SCSS vars → CSS custom properties bridge
+  _mixins.scss             # SCSS mixins for consuming tokens
+  chartBase.scss           # SCSS source for base class definitions
+  index.ts                 # Barrel: provider, hook, types, presets
 ```
 
 ### Naming
@@ -32,6 +45,8 @@ src/components/ChartName/
 ### Barrel exports
 
 Only `src/index.ts` is the public API. Add every new component, type, and hook to it. Do not create nested barrel files.
+
+The exception is `src/theme/index.ts`, which re-exports the theme system for convenience but is itself re-exported via the root barrel.
 
 ### Colocation
 
@@ -45,6 +60,7 @@ Every chart component must follow this structure:
 'use client'
 
 import type { Margin } from '../../types'
+import { useChartTheme } from '../../theme/useChartTheme'
 // D3 imports for math only
 
 export interface ChartNameProps {
@@ -65,12 +81,14 @@ export function ChartName({
   margin = DEFAULT_MARGIN,
   ariaLabel = 'Chart name',
 }: ChartNameProps) {
+  const theme = useChartTheme()
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
 
-  // 1. Build D3 scales
-  // 2. Generate ticks
-  // 3. Create shape generators (if needed)
+  // 1. Read palette/styles from theme
+  // 2. Build D3 scales
+  // 3. Generate ticks
+  // 4. Create shape generators (if needed)
 
   return (
     <svg width={width} height={height} role="img" aria-label={ariaLabel}>
@@ -96,7 +114,7 @@ Every chart component **must** have all of the following:
 - [ ] `<svg role="img" aria-label={ariaLabel}>`
 - [ ] `<desc>{ariaLabel}</desc>` as the first child of `<svg>`
 - [ ] `<title>` on every data mark element (`<rect>`, `<path>`, `<circle>`) with human-readable text
-- [ ] Text elements use `fill="currentColor"` to inherit the host colour scheme
+- [ ] Text elements use theme CSS classes (`d3c-tick-text`, `d3c-legend-text`) or `useChartTheme()` for styling
 - [ ] The `ariaLabel` prop defaults to a descriptive string (e.g., `'Bar chart'`)
 
 ## Testing standards
@@ -128,11 +146,13 @@ When adding a new chart type, complete every step:
 3. Add `'use client'` directive.
 4. Define and export `ChartNameProps` with JSDoc on all props.
 5. Implement accessibility (role, aria-label, desc, title elements).
-6. Create `ChartName.test.tsx` covering all required test cases.
-7. Create `ChartName.stories.tsx` with autodocs and argTypes.
-8. Export component and props from `src/index.ts`.
-9. Add any new shared types to `src/types/index.ts`.
-10. Create `src/components/ChartName/README.md`.
+6. Use `useChartTheme()` for palette, font sizes, stroke widths, and other visual properties. Never hardcode them.
+7. Use CSS classes (`d3c-tick-text`, `d3c-axis-line`, etc.) on shared SVG elements.
+8. Create `ChartName.test.tsx` covering all required test cases.
+9. Create `ChartName.stories.tsx` with autodocs and argTypes.
+10. Export component and props from `src/index.ts`.
+11. Add any new shared types to `src/types/index.ts`.
+12. Create `src/components/ChartName/README.md`.
 
 ## Code style
 
@@ -142,3 +162,40 @@ When adding a new chart type, complete every step:
 - Avoid inline styles except for SVG attributes that are inherently inline (e.g., `transform`).
 - Prefer computed values over mutable state — charts are pure functions of their props.
 - Use `??` for nullish fallbacks, not `||`, when the value might be `0`.
+
+## Theme system
+
+### How it works
+
+The theme system uses CSS custom properties injected at runtime via a `<style>` tag (CrayonAI/react-ui pattern). `ChartThemeProvider` wraps children in a scoped `<div>` and injects theme variables + base CSS class definitions.
+
+### Two ways to consume the theme
+
+1. **CSS classes** for SVG presentation attributes (tick labels, axis lines, grid lines, legend text). Apply classes like `d3c-tick-text`, `d3c-axis-line`, `d3c-grid-line`, `d3c-legend-text` directly on SVG elements.
+2. **`useChartTheme()` hook** for values used in JS computation (palette colors for D3 scales, numeric attributes like `rx`, `strokeWidth`, `r`).
+
+### Theme rules (non-negotiable)
+
+- Never hardcode colors, font sizes, font weights, or font families in component files.
+- Data palette colors always come from `useChartTheme().palette`. Explicit `colors` prop takes precedence when provided.
+- Shared SVG elements (axes, ticks, grid, legend) must use the `d3c-*` CSS classes, not inline style attributes.
+- New themeable properties must be added to `ChartTheme` in `tokens.ts`, to `cssVarNames`, to both preset files, and to `baseStyles.ts` if they need a CSS class.
+
+### CSS variable naming convention
+
+All custom properties use the `--d3c-` prefix:
+
+```
+--d3c-<category>-<property>
+```
+
+Examples: `--d3c-tick-font-size`, `--d3c-axis-line-color`, `--d3c-palette-0`.
+
+## SCSS conventions
+
+- Use `@use` (not `@import`) for all SCSS imports.
+- SCSS file naming: `_mixins.scss` for partials, `cssVarMap.scss` for the variable bridge, `chartBase.scss` for class definitions.
+- All SCSS variables and CSS classes use the `d3c-` namespace prefix.
+- SCSS variables in `cssVarMap.scss` must always include a CSS `var()` fallback matching the light theme default.
+- Mixins in `_mixins.scss` compose multiple token variables into semantic groups (e.g., `@mixin tick-text` sets font-family, font-size, font-weight, and fill together).
+- The SCSS files are the design-system source of truth. The runtime equivalent in `baseStyles.ts` must stay in sync.

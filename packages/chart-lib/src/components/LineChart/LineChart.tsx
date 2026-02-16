@@ -1,3 +1,5 @@
+'use client'
+
 import { scaleLinear } from 'd3-scale'
 import { line, curveMonotoneX } from 'd3-shape'
 import type { LineSeries, Margin } from '../../types'
@@ -5,6 +7,7 @@ import { getLinearTicks } from '../../utils/axes'
 import { getLineExtent } from '../../utils/scales'
 import { AxisBottom } from '../shared/AxisBottom'
 import { AxisLeft } from '../shared/AxisLeft'
+import { useChartTheme } from '../../theme/useChartTheme'
 
 export interface LineChartProps {
   /** Array of line series to render */
@@ -22,7 +25,6 @@ export interface LineChartProps {
 }
 
 const DEFAULT_MARGIN: Margin = { top: 20, right: 20, bottom: 40, left: 50 }
-const DEFAULT_COLORS = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948']
 
 export function LineChart({
   series,
@@ -32,6 +34,7 @@ export function LineChart({
   smooth = true,
   ariaLabel = 'Line chart',
 }: LineChartProps) {
+  const theme = useChartTheme()
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
 
@@ -53,6 +56,9 @@ export function LineChart({
   const xTicks = getLinearTicks(xScale)
   const yTicks = getLinearTicks(yScale)
 
+  const strokeWidth = Number(theme.lineStrokeWidth)
+  const pointR = Number(theme.pointRadius)
+
   return (
     <svg width={width} height={height} role="img" aria-label={ariaLabel}>
       <desc>{ariaLabel}</desc>
@@ -61,19 +67,25 @@ export function LineChart({
         <AxisBottom ticks={xTicks} height={innerHeight} width={innerWidth} />
         {series.map((s, i) => {
           const pathData = lineGenerator(s.data)
-          const strokeColor = s.color || DEFAULT_COLORS[i % DEFAULT_COLORS.length]
+          const strokeColor = s.color ?? theme.palette[i % theme.palette.length]
           return (
             <g key={s.id}>
               <path
                 d={pathData ?? ''}
                 fill="none"
                 stroke={strokeColor}
-                strokeWidth={2}
+                strokeWidth={strokeWidth}
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
               {s.data.map((point, j) => (
-                <circle key={j} cx={xScale(point.x)} cy={yScale(point.y)} r={3} fill={strokeColor}>
+                <circle
+                  key={j}
+                  cx={xScale(point.x)}
+                  cy={yScale(point.y)}
+                  r={pointR}
+                  fill={strokeColor}
+                >
                   <title>{`(${point.x}, ${point.y})`}</title>
                 </circle>
               ))}

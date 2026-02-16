@@ -18,7 +18,7 @@ export function Legend({ items, x = 0, y = 0 }: LegendProps) {
       {items.map((item, i) => (
         <g key={item.key} transform={`translate(${i * itemWidth}, 0)`}>
           <rect width={12} height={12} fill={item.color} rx={2} />
-          <text x={16} y={10} fontSize={11} fill="currentColor">
+          <text x={16} y={10} className="d3c-legend-text">
             {item.key}
           </text>
         </g>

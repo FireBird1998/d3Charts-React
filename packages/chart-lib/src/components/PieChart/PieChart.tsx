@@ -3,6 +3,7 @@
 import { pie, arc } from 'd3-shape'
 import type { PieArcDatum } from 'd3-shape'
 import type { DataPoint } from '../../types'
+import { useChartTheme } from '../../theme/useChartTheme'
 
 export interface PieChartProps {
   /** The data to render as pie slices */
@@ -17,26 +18,13 @@ export interface PieChartProps {
   padAngle?: number
   /** Corner radius for rounded slice edges */
   cornerRadius?: number
-  /** Custom color palette */
+  /** Custom color palette (takes precedence over theme palette) */
   colors?: string[]
   /** Whether to show labels on slices */
   showLabels?: boolean
   /** Accessible label describing the chart */
   ariaLabel?: string
 }
-
-const DEFAULT_COLORS = [
-  '#4e79a7',
-  '#f28e2b',
-  '#e15759',
-  '#76b7b2',
-  '#59a14f',
-  '#edc948',
-  '#b07aa1',
-  '#ff9da7',
-  '#9c755f',
-  '#bab0ac',
-]
 
 export function PieChart({
   data,
@@ -45,10 +33,12 @@ export function PieChart({
   innerRadius = 0,
   padAngle = 0.01,
   cornerRadius = 2,
-  colors = DEFAULT_COLORS,
+  colors,
   showLabels = true,
   ariaLabel = 'Pie chart',
 }: PieChartProps) {
+  const theme = useChartTheme()
+  const palette = colors ?? theme.palette
   const outerRadius = Math.min(width, height) / 2 - 10
 
   const pieGenerator = pie<DataPoint>()
@@ -72,10 +62,15 @@ export function PieChart({
       <desc>{ariaLabel}</desc>
       <g transform={`translate(${width / 2}, ${height / 2})`}>
         {arcs.map((d, i) => {
-          const fillColor = colors[i % colors.length]
+          const fillColor = palette[i % palette.length]
           return (
             <g key={d.data.label}>
-              <path d={arcGenerator(d) ?? ''} fill={fillColor} stroke="#fff" strokeWidth={1}>
+              <path
+                d={arcGenerator(d) ?? ''}
+                fill={fillColor}
+                stroke={theme.pieStrokeColor}
+                strokeWidth={Number(theme.pieStrokeWidth)}
+              >
                 <title>{`${d.data.label}: ${d.data.value}`}</title>
               </path>
               {showLabels && d.endAngle - d.startAngle > 0.3 && (
@@ -83,9 +78,9 @@ export function PieChart({
                   transform={`translate(${labelArc.centroid(d)})`}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fill="#fff"
-                  fontSize={12}
-                  fontWeight={600}
+                  fill={theme.pieLabelColor}
+                  fontSize={theme.pieLabelFontSize}
+                  fontWeight={theme.pieLabelFontWeight}
                   pointerEvents="none"
                 >
                   {d.data.label}

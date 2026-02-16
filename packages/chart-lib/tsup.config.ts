@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup'
+import { sassPlugin } from 'esbuild-sass-plugin'
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -9,6 +10,7 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   external: ['react', 'react-dom'],
+  esbuildPlugins: [sassPlugin()],
   outExtension({ format }) {
     return {
       js: format === 'esm' ? '.mjs' : '.cjs',

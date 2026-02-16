@@ -1,0 +1,39 @@
+// _mixins.scss — Reusable SCSS mixins that compose design tokens from cssVarMap.
+// Use these in chartBase.scss or any future component-specific stylesheets.
+
+@use 'cssVarMap' as *;
+
+// Text style for axis tick labels
+@mixin tick-text {
+  font-family: $d3c-font-family;
+  font-size: $d3c-tick-font-size;
+  font-weight: $d3c-tick-font-weight;
+  fill: $d3c-tick-color;
+}
+
+// Stroke style for the main axis lines (the line along the axis)
+@mixin axis-line {
+  stroke: $d3c-axis-line-color;
+  stroke-width: $d3c-axis-line-width;
+}
+
+// Stroke style for axis tick marks (small lines perpendicular to axis)
+@mixin tick-line {
+  stroke: $d3c-axis-line-color;
+  stroke-width: $d3c-axis-line-width;
+}
+
+// Stroke style for background grid lines
+@mixin grid-line {
+  stroke: $d3c-grid-line-color;
+  stroke-width: $d3c-grid-line-width;
+  stroke-dasharray: $d3c-grid-line-dasharray;
+}
+
+// Text style for legend labels
+@mixin legend-text {
+  font-family: $d3c-font-family;
+  font-size: $d3c-legend-font-size;
+  font-weight: $d3c-legend-font-weight;
+  fill: $d3c-legend-color;
+}

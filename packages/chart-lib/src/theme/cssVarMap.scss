@@ -1,0 +1,42 @@
+// cssVarMap.scss — SCSS variables that resolve to CSS custom properties.
+// Each variable has a hardcoded fallback matching the light theme so charts
+// render correctly even without a ChartThemeProvider wrapper.
+
+// Typography
+$d3c-font-family: var(--d3c-font-family, 'Inter', 'Helvetica Neue', system-ui, sans-serif);
+
+// Tick labels
+$d3c-tick-font-size: var(--d3c-tick-font-size, 12px);
+$d3c-tick-font-weight: var(--d3c-tick-font-weight, 400);
+$d3c-tick-color: var(--d3c-tick-color, #4b5563);
+
+// Axis lines
+$d3c-axis-line-color: var(--d3c-axis-line-color, #9ca3af);
+$d3c-axis-line-width: var(--d3c-axis-line-width, 1);
+
+// Grid lines
+$d3c-grid-line-color: var(--d3c-grid-line-color, #e5e7eb);
+$d3c-grid-line-width: var(--d3c-grid-line-width, 1);
+$d3c-grid-line-dasharray: var(--d3c-grid-line-dasharray, 2, 2);
+
+// Legend
+$d3c-legend-font-size: var(--d3c-legend-font-size, 11px);
+$d3c-legend-font-weight: var(--d3c-legend-font-weight, 500);
+$d3c-legend-color: var(--d3c-legend-color, #374151);
+
+// Chart background
+$d3c-chart-bg: var(--d3c-chart-bg, transparent);
+
+// Bar chart
+$d3c-bar-border-radius: var(--d3c-bar-border-radius, 2);
+
+// Line chart
+$d3c-line-stroke-width: var(--d3c-line-stroke-width, 2);
+$d3c-point-radius: var(--d3c-point-radius, 3);
+
+// Pie chart
+$d3c-pie-stroke-color: var(--d3c-pie-stroke-color, #ffffff);
+$d3c-pie-stroke-width: var(--d3c-pie-stroke-width, 1);
+$d3c-pie-label-color: var(--d3c-pie-label-color, #ffffff);
+$d3c-pie-label-font-size: var(--d3c-pie-label-font-size, 12px);
+$d3c-pie-label-font-weight: var(--d3c-pie-label-font-weight, 600);
