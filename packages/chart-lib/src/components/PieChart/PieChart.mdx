@@ -1,0 +1,55 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks'
+import * as PieChartStories from './PieChart.stories'
+
+<Meta of={PieChartStories} />
+
+# PieChart
+
+An accessible pie/donut chart with configurable inner radius, rounded corners, pad angles, and conditional slice labels.
+
+## Default pie
+
+A standard full-pie chart with automatic labels.
+
+<Canvas of={PieChartStories.Default} />
+
+## Donut
+
+Set `innerRadius` to create a donut chart.
+
+<Canvas of={PieChartStories.Donut} />
+
+## Custom colours
+
+Override the default palette with your own colour scheme.
+
+<Canvas of={PieChartStories.CustomColors} />
+
+## No labels
+
+Hide slice labels for a cleaner look.
+
+<Canvas of={PieChartStories.NoLabels} />
+
+## Two slices
+
+A simple yes/no donut chart.
+
+<Canvas of={PieChartStories.TwoSlices} />
+
+## Many slices
+
+Ten slices demonstrating the palette cycling and label-hiding for small arcs.
+
+<Canvas of={PieChartStories.ManySlices} />
+
+## Props
+
+<Controls />
+
+## Architecture notes
+
+- Uses `d3-shape` (`pie`, `arc`) for layout computation and path generation.
+- Slice labels are positioned at 65% of the outer radius using a separate label arc generator.
+- Labels are automatically hidden when a slice's angular span is less than `0.3` radians to prevent overlap.
+- The `<svg>` element includes `role="img"`, `aria-label`, a `<desc>`, and `<title>` elements on each slice for accessibility.

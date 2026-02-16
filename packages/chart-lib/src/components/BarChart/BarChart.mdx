@@ -1,0 +1,49 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks'
+import * as BarChartStories from './BarChart.stories'
+
+<Meta of={BarChartStories} />
+
+# BarChart
+
+A generic, accessible bar chart supporting **grouped** and **stacked** modes with automatic legend rendering for multi-series data.
+
+## Single series
+
+A simple bar chart with one data series per category.
+
+<Canvas of={BarChartStories.SingleSeries} />
+
+## Grouped bars
+
+Multiple series rendered side by side within each category.
+
+<Canvas of={BarChartStories.Grouped} />
+
+## Stacked bars
+
+Multiple series stacked on top of each other per category.
+
+<Canvas of={BarChartStories.Stacked} />
+
+## Custom colours
+
+Override the default Tableau-10 palette with per-key colours.
+
+<Canvas of={BarChartStories.CustomColors} />
+
+## Stacked with custom colours
+
+Stacked mode combined with a custom colour palette.
+
+<Canvas of={BarChartStories.StackedCustomColors} />
+
+## Props
+
+<Controls />
+
+## Architecture notes
+
+- Uses `d3-scale` (`scaleBand` + `scaleLinear`) for axis mapping and `d3-shape` (`stack`) for the stacked layout.
+- Ticks are generated via `getBandTicks` / `getLinearTicks` from `utils/axes.ts` and passed to the `AxisBottom` and `AxisLeft` shared components.
+- A `Legend` component is rendered automatically when `keys.length > 1`.
+- The `<svg>` element includes `role="img"`, `aria-label`, a `<desc>`, and `<title>` elements on each bar for accessibility.

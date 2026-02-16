@@ -1,0 +1,43 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks'
+import * as LineChartStories from './LineChart.stories'
+
+<Meta of={LineChartStories} />
+
+# LineChart
+
+An accessible multi-series line chart with optional smooth curves and data-point markers.
+
+## Default (smooth)
+
+A single series rendered with monotone-X curve interpolation.
+
+<Canvas of={LineChartStories.Default} />
+
+## Multiple series
+
+Two series overlaid on the same axes, each with its own colour.
+
+<Canvas of={LineChartStories.MultipleSeries} />
+
+## Straight lines
+
+Disable smooth curves for a linear interpolation between points.
+
+<Canvas of={LineChartStories.StraightLines} />
+
+## Small chart
+
+Compact dimensions demonstrating responsive scaling.
+
+<Canvas of={LineChartStories.SmallChart} />
+
+## Props
+
+<Controls />
+
+## Architecture notes
+
+- Uses `d3-scale` (`scaleLinear`) for both axes and `d3-shape` (`line` + `curveMonotoneX`) for path generation.
+- Extents are computed across all series via `getLineExtent` from `utils/scales.ts`.
+- Each data point is rendered as a `<circle>` with a `<title>` tooltip showing the `(x, y)` values.
+- The `<svg>` element includes `role="img"`, `aria-label`, and a `<desc>` for accessibility.
