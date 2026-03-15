@@ -40,6 +40,13 @@ export const BASE_STYLES = `
   fill: var(--d3c-legend-color, #374151);
 }
 
+.d3c-axis-label {
+  font-family: var(--d3c-font-family, 'Inter', 'Helvetica Neue', system-ui, sans-serif);
+  font-size: var(--d3c-axis-label-font-size, 12px);
+  font-weight: var(--d3c-axis-label-font-weight, 500);
+  fill: var(--d3c-axis-label-color, #374151);
+}
+
 .d3c-pie-label {
   font-family: var(--d3c-font-family, 'Inter', 'Helvetica Neue', system-ui, sans-serif);
   font-size: var(--d3c-pie-label-font-size, 12px);

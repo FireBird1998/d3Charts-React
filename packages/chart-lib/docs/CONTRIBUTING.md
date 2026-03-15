@@ -1,6 +1,6 @@
 # Contributing
 
-Guidelines for contributing to `@d3charts/react`. Read the [Architecture doc](./ARCHITECTURE.md) first.
+Guidelines for contributing to `@firebird1998/d3charts-react`. Read the [Architecture doc](./ARCHITECTURE.md) first.
 
 ## Adding a new chart type
 

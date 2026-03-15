@@ -30,6 +30,23 @@
   stroke-dasharray: $d3c-grid-line-dasharray;
 }
 
+// Text style for axis labels (x-axis and y-axis titles)
+@mixin axis-label {
+  font-family: $d3c-font-family;
+  font-size: $d3c-axis-label-font-size;
+  font-weight: $d3c-axis-label-font-weight;
+  fill: $d3c-axis-label-color;
+}
+
+// Text style for pie slice labels
+@mixin pie-label {
+  font-family: $d3c-font-family;
+  font-size: $d3c-pie-label-font-size;
+  font-weight: $d3c-pie-label-font-weight;
+  fill: $d3c-pie-label-color;
+  pointer-events: none;
+}
+
 // Text style for legend labels
 @mixin legend-text {
   font-family: $d3c-font-family;

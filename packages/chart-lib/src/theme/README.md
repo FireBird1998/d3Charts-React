@@ -1,11 +1,11 @@
 # Theme System
 
-The `@d3charts/react` theme system provides full control over chart styling through CSS custom properties and a React context provider.
+The `@firebird1998/d3charts-react` theme system provides full control over chart styling through CSS custom properties and a React context provider.
 
 ## Quick Start
 
 ```tsx
-import { ChartThemeProvider, BarChart } from '@d3charts/react'
+import { ChartThemeProvider, BarChart } from '@firebird1998/d3charts-react'
 
 // Light mode (default)
 <BarChart data={data} keys={['revenue']} categoryKey="month" width={600} height={400} />
@@ -33,7 +33,7 @@ Charts work without a `<ChartThemeProvider>` wrapper — they fall back to the l
 Hook that returns the current `ChartTheme` from the nearest provider. Falls back to the light theme when no provider is present.
 
 ```tsx
-import { useChartTheme } from '@d3charts/react'
+import { useChartTheme } from '@firebird1998/d3charts-react'
 
 function MyCustomChart() {
   const theme = useChartTheme()
@@ -76,7 +76,7 @@ Override specific tokens while inheriting the rest from a preset:
 Pass a complete `ChartTheme` object:
 
 ```tsx
-import type { ChartTheme } from '@d3charts/react'
+import type { ChartTheme } from '@firebird1998/d3charts-react'
 
 const myTheme: ChartTheme = {
   fontFamily: "'IBM Plex Sans', sans-serif",

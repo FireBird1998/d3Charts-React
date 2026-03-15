@@ -1,84 +1,41 @@
-'use client'
-
-import { BarChart, LineChart } from '@firebird1998/d3charts-react'
-
-const barData = [
-  { label: 'Jan', value: 30 },
-  { label: 'Feb', value: 80 },
-  { label: 'Mar', value: 45 },
-  { label: 'Apr', value: 60 },
-  { label: 'May', value: 20 },
-  { label: 'Jun', value: 90 },
-  { label: 'Jul', value: 55 },
-]
-
-const lineSeries = [
-  {
-    id: 'revenue',
-    data: [
-      { x: 0, y: 10 },
-      { x: 1, y: 25 },
-      { x: 2, y: 18 },
-      { x: 3, y: 35 },
-      { x: 4, y: 28 },
-      { x: 5, y: 42 },
-      { x: 6, y: 38 },
-    ],
-    color: '#4e79a7',
-  },
-  {
-    id: 'expenses',
-    data: [
-      { x: 0, y: 15 },
-      { x: 1, y: 12 },
-      { x: 2, y: 22 },
-      { x: 3, y: 20 },
-      { x: 4, y: 30 },
-      { x: 5, y: 25 },
-      { x: 6, y: 32 },
-    ],
-    color: '#e15759',
-  },
-]
+import Link from 'next/link'
+import { PreviewCards } from './PreviewCards'
 
 export default function Home() {
   return (
-    <main style={{ maxWidth: 800, margin: '0 auto', padding: '2rem' }}>
-      <h1 style={{ marginBottom: '0.5rem', fontSize: '1.75rem', fontWeight: 700 }}>
-        D3Charts — Next.js Demo
-      </h1>
-      <p style={{ color: '#666', marginBottom: '2rem' }}>
-        Server-side rendered page consuming <code>@firebird1998/d3charts-react</code> with{' '}
-        <code>&quot;use client&quot;</code>
-      </p>
-
-      <section style={{ marginBottom: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Bar Chart</h2>
-        <div
-          style={{
-            background: '#fff',
-            padding: '1rem',
-            borderRadius: 8,
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          }}
-        >
-          <BarChart data={barData} keys={['value']} categoryKey="label" width={700} height={400} />
+    <div>
+      <section className="py-12 text-center">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+          D3Charts for React
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+          A composable charting library that uses D3 for math and React for rendering. Fully
+          responsive, theme-aware, and accessible out of the box.
+        </p>
+        <div className="mt-8 flex justify-center gap-4">
+          <Link
+            href="/bar-chart"
+            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700"
+          >
+            Explore Charts
+          </Link>
+          <a
+            href="https://github.com/AkshayFirebird1998/D3Charts"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+          >
+            GitHub
+          </a>
         </div>
       </section>
 
-      <section>
-        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Line Chart</h2>
-        <div
-          style={{
-            background: '#fff',
-            padding: '1rem',
-            borderRadius: 8,
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          }}
-        >
-          <LineChart series={lineSeries} width={700} height={400} />
-        </div>
+      <section className="py-8">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-gray-900 dark:text-white">
+          Chart Types
+        </h2>
+        <PreviewCards />
       </section>
-    </main>
+    </div>
   )
 }

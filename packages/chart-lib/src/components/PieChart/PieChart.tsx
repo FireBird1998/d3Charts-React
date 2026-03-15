@@ -66,6 +66,7 @@ export function PieChart({
   return (
     <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
       <desc>{ariaLabel}</desc>
+      <rect width={width} height={height} fill={theme.chartBackground} aria-hidden="true" />
       <g transform={`translate(${width / 2}, ${height / 2})`}>
         {arcs.map((d, i) => {
           const fillColor = palette[i % palette.length]

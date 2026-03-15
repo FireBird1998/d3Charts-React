@@ -8,9 +8,20 @@ interface AxisBottomProps {
   width: number
   /** Optional formatter for tick label values */
   tickFormat?: (value: string | number) => string
+  /** Optional axis label displayed below the tick labels */
+  label?: string
+  /** Distance from axis line to label baseline. Derived from margin.bottom by chart components. */
+  labelOffset?: number
 }
 
-export function AxisBottom({ ticks, height, width, tickFormat }: AxisBottomProps) {
+export function AxisBottom({
+  ticks,
+  height,
+  width,
+  tickFormat,
+  label,
+  labelOffset = 36,
+}: AxisBottomProps) {
   return (
     <g transform={`translate(0, ${height})`}>
       <line x1={0} x2={width} className="d3c-axis-line" />
@@ -22,6 +33,11 @@ export function AxisBottom({ ticks, height, width, tickFormat }: AxisBottomProps
           </text>
         </g>
       ))}
+      {label && (
+        <text x={width / 2} y={labelOffset} textAnchor="middle" className="d3c-axis-label">
+          {label}
+        </text>
+      )}
     </g>
   )
 }

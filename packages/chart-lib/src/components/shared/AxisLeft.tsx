@@ -8,9 +8,20 @@ interface AxisLeftProps {
   height: number
   /** Optional formatter for tick label values */
   tickFormat?: (value: string | number) => string
+  /** Optional axis label displayed to the left of the tick labels */
+  label?: string
+  /** Distance from axis line to label center (positive = further left). Derived from margin.left by chart components. */
+  labelOffset?: number
 }
 
-export function AxisLeft({ ticks, width, height, tickFormat }: AxisLeftProps) {
+export function AxisLeft({
+  ticks,
+  width,
+  height,
+  tickFormat,
+  label,
+  labelOffset = 40,
+}: AxisLeftProps) {
   return (
     <g>
       <line y1={0} y2={height} className="d3c-axis-line" />
@@ -23,6 +34,15 @@ export function AxisLeft({ ticks, width, height, tickFormat }: AxisLeftProps) {
           </text>
         </g>
       ))}
+      {label && (
+        <text
+          transform={`translate(${-labelOffset}, ${height / 2}) rotate(-90)`}
+          textAnchor="middle"
+          className="d3c-axis-label"
+        >
+          {label}
+        </text>
+      )}
     </g>
   )
 }

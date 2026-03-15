@@ -8,6 +8,7 @@ export const darkTheme: ChartTheme = {
   axisLineColor: '#6b7280',
   gridLineColor: '#374151',
   legendColor: '#e5e7eb',
+  axisLabelColor: '#e5e7eb',
 
   chartBackground: 'transparent',
 

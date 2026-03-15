@@ -5,7 +5,7 @@ An accessible pie/donut chart with configurable inner radius, rounded corners, p
 ## Usage
 
 ```tsx
-import { PieChart } from '@d3charts/react'
+import { PieChart } from '@firebird1998/d3charts-react'
 
 const data = [
   { label: 'React', value: 40 },

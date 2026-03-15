@@ -110,7 +110,7 @@ export const SingleSeries: Story = {
     const desc = svg.querySelector('desc')
     await expect(desc).toHaveTextContent('Monthly sales')
 
-    const rects = svg.querySelectorAll('rect')
+    const rects = svg.querySelectorAll('rect:not([aria-hidden])')
     await expect(rects.length).toBe(singleSeriesData.length)
 
     const legend = svg.querySelector('.legend')
@@ -138,7 +138,7 @@ export const Grouped: Story = {
     const legendTexts = legend?.querySelectorAll('.d3c-legend-text')
     await expect(legendTexts?.length).toBe(3)
 
-    const allRects = svg.querySelectorAll('rect')
+    const allRects = svg.querySelectorAll('rect:not([aria-hidden])')
     const legendRects = svg.querySelectorAll('.legend rect')
     await expect(allRects.length - legendRects.length).toBe(18)
   },
@@ -237,7 +237,7 @@ export const LightThemeDefault: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const firstRect = svg.querySelector('rect')
+    const firstRect = svg.querySelector('rect:not([aria-hidden])')
     await expect(firstRect).toHaveAttribute('fill', lightTheme.palette[0])
     await expect(firstRect).toHaveAttribute('rx', lightTheme.barBorderRadius)
 
@@ -283,7 +283,7 @@ export const DarkTheme: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const firstRect = svg.querySelector('rect')
+    const firstRect = svg.querySelector('rect:not([aria-hidden])')
     await expect(firstRect).toHaveAttribute('fill', darkTheme.palette[0])
 
     const styleEl = canvasElement.parentElement?.querySelector('style')
@@ -318,7 +318,7 @@ export const CustomPaletteOverride: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const firstRect = svg.querySelector('rect')
+    const firstRect = svg.querySelector('rect:not([aria-hidden])')
     await expect(firstRect).toHaveAttribute('fill', '#6366f1')
     await expect(firstRect).toHaveAttribute('rx', '6')
   },
@@ -389,7 +389,7 @@ export const ColorsOverrideTheme: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const rects = svg.querySelectorAll('rect')
+    const rects = svg.querySelectorAll('rect:not([aria-hidden])')
     await expect(rects[0]).toHaveAttribute('fill', '#ff0000')
     await expect(rects[1]).toHaveAttribute('fill', '#bbbbbb')
   },
@@ -424,7 +424,7 @@ export const StackedDarkTheme: Story = {
     const fills = Array.from(layerGroups ?? []).map((g) => g.getAttribute('fill'))
     await expect(fills).toContain(darkTheme.palette[0])
 
-    const rect = svg.querySelector('rect')
+    const rect = svg.querySelector('rect:not([aria-hidden])')
     await expect(rect).toHaveAttribute('rx', darkTheme.barBorderRadius)
   },
 }
@@ -466,7 +466,7 @@ export const FullyCustomTheme: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const firstRect = svg.querySelector('rect')
+    const firstRect = svg.querySelector('rect:not([aria-hidden])')
     await expect(firstRect).toHaveAttribute('fill', '#0055ff')
     await expect(firstRect).toHaveAttribute('rx', '4')
 
@@ -507,8 +507,8 @@ export const SideBySideThemes: Story = {
     const svgs = canvasElement.querySelectorAll('svg')
     await expect(svgs.length).toBe(2)
 
-    const lightRect = svgs[0].querySelector('rect')
-    const darkRect = svgs[1].querySelector('rect')
+    const lightRect = svgs[0].querySelector('rect:not([aria-hidden])')
+    const darkRect = svgs[1].querySelector('rect:not([aria-hidden])')
     await expect(lightRect).toHaveAttribute('fill', lightTheme.palette[0])
     await expect(darkRect).toHaveAttribute('fill', darkTheme.palette[0])
 
@@ -536,7 +536,7 @@ export const EmptyData: Story = {
     const svg = canvas.getByRole('img')
     await expect(svg).toBeInTheDocument()
 
-    const rects = svg.querySelectorAll('rect')
+    const rects = svg.querySelectorAll('rect:not([aria-hidden])')
     await expect(rects.length).toBe(0)
   },
 }
@@ -555,7 +555,7 @@ export const SingleDataPoint: Story = {
     const canvas = within(canvasElement)
     const svg = canvas.getByRole('img')
 
-    const rects = svg.querySelectorAll('rect')
+    const rects = svg.querySelectorAll('rect:not([aria-hidden])')
     await expect(rects.length).toBe(1)
 
     const title = rects[0].querySelector('title')

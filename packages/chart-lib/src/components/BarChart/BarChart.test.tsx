@@ -64,7 +64,7 @@ describe('BarChart — base rendering', () => {
 
   it('renders the correct number of bars for single series', () => {
     const { container } = renderBarChart()
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     expect(rects).toHaveLength(singleSeriesData.length)
   })
 
@@ -75,7 +75,7 @@ describe('BarChart — base rendering', () => {
       categoryKey: 'month',
       mode: 'grouped',
     })
-    const allRects = container.querySelectorAll('rect')
+    const allRects = container.querySelectorAll('rect:not([aria-hidden])')
     const legendRects = container.querySelectorAll('.legend rect')
     const dataBarCount = allRects.length - legendRects.length
     // 3 categories x 3 keys = 9 bars
@@ -89,7 +89,7 @@ describe('BarChart — base rendering', () => {
       categoryKey: 'month',
       mode: 'stacked',
     })
-    const allRects = container.querySelectorAll('rect')
+    const allRects = container.querySelectorAll('rect:not([aria-hidden])')
     const legendRects = container.querySelectorAll('.legend rect')
     const dataBarCount = allRects.length - legendRects.length
     // 3 categories x 3 keys = 9 stacked segments
@@ -147,7 +147,7 @@ describe('BarChart — edge cases', () => {
     const { container } = renderBarChart({ data: [] })
     const svg = screen.getByRole('img')
     expect(svg).toBeInTheDocument()
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     expect(rects).toHaveLength(0)
   })
 
@@ -155,7 +155,7 @@ describe('BarChart — edge cases', () => {
     const { container } = renderBarChart({
       data: [{ label: 'Only', value: 42 }],
     })
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     expect(rects).toHaveLength(1)
   })
 })
@@ -167,14 +167,14 @@ describe('BarChart — edge cases', () => {
 describe('BarChart — theme defaults (no provider)', () => {
   it('uses the light theme palette colors by default', () => {
     const { container } = renderBarChart()
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     // First key gets first palette color from light theme
     expect(rect).toHaveAttribute('fill', lightTheme.palette[0])
   })
 
   it('uses the light theme barBorderRadius by default', () => {
     const { container } = renderBarChart()
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     expect(rect).toHaveAttribute('rx', lightTheme.barBorderRadius)
   })
 })
@@ -189,7 +189,7 @@ describe('BarChart — light theme provider', () => {
       { data: multiSeriesData, keys: ['car', 'bus', 'cycle'], categoryKey: 'month' },
       { theme: 'light' },
     )
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     // In grouped mode, find the first rect for each key
     // car = palette[0], bus = palette[1], cycle = palette[2]
     const firstCarRect = rects[0]
@@ -234,7 +234,7 @@ describe('BarChart — dark theme provider', () => {
       { data: multiSeriesData, keys: ['car', 'bus', 'cycle'], categoryKey: 'month' },
       { theme: 'dark' },
     )
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     // Dark theme inherits the same palette as light
     expect(rect).toHaveAttribute('fill', darkTheme.palette[0])
   })
@@ -260,7 +260,7 @@ describe('BarChart — theme overrides', () => {
       { data: multiSeriesData, keys: ['car', 'bus', 'cycle'], categoryKey: 'month' },
       { theme: 'light', overrides: { palette: customPalette } },
     )
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     // First key (car) gets customPalette[0]
     expect(rects[0]).toHaveAttribute('fill', '#ff0000')
   })
@@ -270,7 +270,7 @@ describe('BarChart — theme overrides', () => {
       {},
       { theme: 'light', overrides: { barBorderRadius: '8' } },
     )
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     expect(rect).toHaveAttribute('rx', '8')
   })
 
@@ -279,7 +279,7 @@ describe('BarChart — theme overrides', () => {
       {},
       { theme: 'light', overrides: { barBorderRadius: '10' } },
     )
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     // barBorderRadius was overridden
     expect(rect).toHaveAttribute('rx', '10')
     // palette was NOT overridden, so default light palette applies
@@ -314,13 +314,13 @@ describe('BarChart — fully custom theme object', () => {
       { data: multiSeriesData, keys: ['car', 'bus', 'cycle'], categoryKey: 'month' },
       { theme: customTheme },
     )
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     expect(rect).toHaveAttribute('fill', '#111111')
   })
 
   it('uses custom barBorderRadius', () => {
     const { container } = renderBarChart({}, { theme: customTheme })
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect:not([aria-hidden])')
     expect(rect).toHaveAttribute('rx', '6')
   })
 
@@ -349,7 +349,7 @@ describe('BarChart — colors prop overrides theme palette', () => {
       categoryKey: 'month',
       colors: { car: '#ff00ff', bus: '#00ffff' },
     })
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     // car gets explicit color
     expect(rects[0]).toHaveAttribute('fill', '#ff00ff')
   })
@@ -364,7 +364,7 @@ describe('BarChart — colors prop overrides theme palette', () => {
       },
       { theme: 'light', overrides: { palette: ['#aaa', '#bbb', '#ccc'] } },
     )
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     // car uses explicit color, not the override palette
     expect(rects[0]).toHaveAttribute('fill', '#deadbe')
   })
@@ -376,7 +376,7 @@ describe('BarChart — colors prop overrides theme palette', () => {
       categoryKey: 'month',
       colors: { car: '#ff00ff' },
     })
-    const rects = container.querySelectorAll('rect')
+    const rects = container.querySelectorAll('rect:not([aria-hidden])')
     // bus (index 1) has no explicit color -> falls back to palette[1]
     expect(rects[1]).toHaveAttribute('fill', lightTheme.palette[1])
   })
@@ -475,7 +475,7 @@ describe('BarChart — stacked mode with theme', () => {
       },
       { theme: 'light', overrides: { barBorderRadius: '5' } },
     )
-    const rect = container.querySelector('rect')
+    const rect = container.querySelector('rect[rx]')
     expect(rect).toHaveAttribute('rx', '5')
   })
 })
@@ -515,11 +515,11 @@ describe('BarChart — multiple theme providers', () => {
     expect(svgs).toHaveLength(2)
 
     // Chart A bars use #aaaaaa
-    const rectsA = svgs[0].querySelectorAll('rect')
+    const rectsA = svgs[0].querySelectorAll('rect:not([aria-hidden])')
     expect(rectsA[0]).toHaveAttribute('fill', '#aaaaaa')
 
     // Chart B bars use #bbbbbb
-    const rectsB = svgs[1].querySelectorAll('rect')
+    const rectsB = svgs[1].querySelectorAll('rect:not([aria-hidden])')
     expect(rectsB[0]).toHaveAttribute('fill', '#bbbbbb')
   })
 
