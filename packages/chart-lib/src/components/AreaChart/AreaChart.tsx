@@ -80,7 +80,7 @@ export function AreaChart({
 
   const areaGenerator = area<{ x: number; y: number }>()
     .x((d) => xScale(d.x))
-    .y0(innerHeight)
+    .y0(yScale(0))
     .y1((d) => yScale(d.y))
     .curve(curveFunc)
 

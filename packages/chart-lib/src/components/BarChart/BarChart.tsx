@@ -92,7 +92,6 @@ export function BarChart<
 
   let yMax: number
   let stackedData: Series<D, string>[] | null = null
-  const xSubScale = scaleBand<string>().domain(keys).range([0, xScale.bandwidth()]).padding(0.05)
 
   if (mode === 'stacked') {
     const stackGenerator = d3stack<D, string>().keys(keys)
@@ -125,6 +124,7 @@ export function BarChart<
   }
 
   function renderGroupedBars() {
+    const xSubScale = scaleBand<string>().domain(keys).range([0, xScale.bandwidth()]).padding(0.05)
     return data.map((d) => {
       const category = String(d[categoryKey])
       const groupX = xScale(category) ?? 0

@@ -108,7 +108,7 @@ export function LineChart({
           label={xAxisLabel}
           labelOffset={margin.bottom - 6}
         />
-        {series.map((s, i) => {
+        {series.map((s) => {
           const pathData = lineGenerator(s.data)
           const strokeColor = colorMap[s.id]
           return (

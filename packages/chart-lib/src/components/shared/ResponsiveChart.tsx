@@ -37,6 +37,7 @@ export function ResponsiveChart({
 
   return (
     <div
+      // Cast needed: useResizeObserver returns RefObject<T | null> but JSX ref expects RefObject<T> (React 18/19 nullability mismatch)
       ref={ref as RefObject<HTMLDivElement>}
       className={className}
       style={{ width: '100%', height: aspectRatio ? 'auto' : '100%' }}
