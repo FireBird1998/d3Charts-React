@@ -4,6 +4,7 @@ import { PieChart } from './PieChart'
 const meta: Meta<typeof PieChart> = {
   title: 'Charts/PieChart',
   component: PieChart,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

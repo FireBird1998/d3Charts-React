@@ -3,6 +3,7 @@
 import { scaleBand, scaleLinear } from 'd3-scale'
 import { stack as d3stack } from 'd3-shape'
 import { max as d3max } from 'd3-array'
+import { DEFAULT_MARGIN } from '../../types'
 import type { Margin } from '../../types'
 import { getBandTicks, getLinearTicks } from '../../utils/axes'
 import { AxisBottom } from '../shared/AxisBottom'
@@ -31,9 +32,13 @@ export interface BarChartProps<
   colors?: Record<string, string>
   /** Accessible label describing the chart */
   ariaLabel?: string
+  /** Custom CSS class name for the SVG element */
+  className?: string
+  /** Formatter for x-axis tick labels */
+  xTickFormat?: (value: string | number) => string
+  /** Formatter for y-axis tick labels */
+  yTickFormat?: (value: string | number) => string
 }
-
-const DEFAULT_MARGIN: Margin = { top: 20, right: 20, bottom: 40, left: 50 }
 
 function getColor(
   key: string,
@@ -57,6 +62,9 @@ export function BarChart<
   mode = 'grouped',
   colors,
   ariaLabel = 'Bar chart',
+  className,
+  xTickFormat,
+  yTickFormat,
 }: BarChartProps<D>) {
   const theme = useChartTheme()
   const innerWidth = width - margin.left - margin.right
@@ -87,11 +95,21 @@ export function BarChart<
     const yTicks = getLinearTicks(yScale)
 
     return (
-      <svg width={width} height={height} role="img" aria-label={ariaLabel}>
+      <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
         <desc>{ariaLabel}</desc>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <AxisLeft ticks={yTicks} width={innerWidth} height={innerHeight} />
-          <AxisBottom ticks={xTicks} height={innerHeight} width={innerWidth} />
+          <AxisLeft
+            ticks={yTicks}
+            width={innerWidth}
+            height={innerHeight}
+            tickFormat={yTickFormat}
+          />
+          <AxisBottom
+            ticks={xTicks}
+            height={innerHeight}
+            width={innerWidth}
+            tickFormat={xTickFormat}
+          />
           {stackedData.map((layer) => (
             <g key={layer.key} fill={colorMap[layer.key]}>
               {layer.map((segment, i) => {
@@ -136,7 +154,7 @@ export function BarChart<
   const yTicks = getLinearTicks(yScale)
 
   return (
-    <svg width={width} height={height} role="img" aria-label={ariaLabel}>
+    <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
       <desc>{ariaLabel}</desc>
       <g transform={`translate(${margin.left}, ${margin.top})`}>
         <AxisLeft ticks={yTicks} width={innerWidth} height={innerHeight} />

@@ -5,9 +5,9 @@ import * as LineChartStories from './LineChart.stories'
 
 # LineChart
 
-An accessible multi-series line chart with optional smooth curves and data-point markers.
+An accessible multi-series line chart with configurable curve interpolation and data-point markers.
 
-## Default (smooth)
+## Default (monotoneX)
 
 A single series rendered with monotone-X curve interpolation.
 
@@ -21,7 +21,7 @@ Two series overlaid on the same axes, each with its own colour.
 
 ## Straight lines
 
-Disable smooth curves for a linear interpolation between points.
+Linear interpolation between points.
 
 <Canvas of={LineChartStories.StraightLines} />
 
@@ -37,7 +37,7 @@ Compact dimensions demonstrating responsive scaling.
 
 ## Architecture notes
 
-- Uses `d3-scale` (`scaleLinear`) for both axes and `d3-shape` (`line` + `curveMonotoneX`) for path generation.
+- Uses `d3-scale` (`scaleLinear`) for both axes and `d3-shape` (`line` + configurable curve) for path generation.
 - Extents are computed across all series via `getLineExtent` from `utils/scales.ts`.
 - Each data point is rendered as a `<circle>` with a `<title>` tooltip showing the `(x, y)` values.
 - The `<svg>` element includes `role="img"`, `aria-label`, and a `<desc>` for accessibility.

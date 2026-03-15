@@ -36,6 +36,14 @@ function themeToCss(scopeAttr: string, theme: ChartTheme): string {
 }
 
 /**
+ * Scope BASE_STYLES class selectors under the provider's data attribute
+ * so each provider's styles only apply to its descendants.
+ */
+function scopeBaseStyles(scopeAttr: string): string {
+  return BASE_STYLES.replace(/\.(d3c-[\w-]+)/g, `[${scopeAttr}] .$1`)
+}
+
+/**
  * Provides a chart theme to all descendant chart components.
  *
  * Injects CSS custom properties via a `<style>` tag scoped to a unique
@@ -63,7 +71,7 @@ export function ChartThemeProvider({
   }, [theme, overrides])
 
   const cssText = useMemo(
-    () => `${themeToCss(scopeAttr, resolved)}\n${BASE_STYLES}`,
+    () => `${themeToCss(scopeAttr, resolved)}\n${scopeBaseStyles(scopeAttr)}`,
     [scopeAttr, resolved],
   )
 
