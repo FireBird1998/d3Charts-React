@@ -5,7 +5,7 @@ A generic, accessible bar chart supporting **grouped** and **stacked** modes wit
 ## Usage
 
 ```tsx
-import { BarChart } from '@d3charts/react'
+import { BarChart } from '@firebird1998/d3charts-react'
 
 const data = [
   { month: 'Jan', car: 120, bus: 45 },

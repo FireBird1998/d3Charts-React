@@ -79,7 +79,7 @@ Each item is spaced `85px` apart horizontally. Each item renders:
 **Standalone** — consumers can import and place it anywhere in an SVG:
 
 ```tsx
-import { Legend } from '@d3charts/react'
+import { Legend } from '@firebird1998/d3charts-react'
 ;<svg width={400} height={300}>
   {/* chart content */}
   <Legend

@@ -1,4 +1,4 @@
-# @d3charts/react
+# @firebird1998/d3charts-react
 
 <!-- badges -->
 
@@ -12,13 +12,13 @@ A lightweight, accessible React charting library powered by D3 math. SVG-first, 
 
 ```bash
 # npm
-npm install @d3charts/react
+npm install @firebird1998/d3charts-react
 
 # pnpm
-pnpm add @d3charts/react
+pnpm add @firebird1998/d3charts-react
 
 # yarn
-yarn add @d3charts/react
+yarn add @firebird1998/d3charts-react
 ```
 
 **Peer dependencies:** `react >= 18` and `react-dom >= 18`.
@@ -26,7 +26,7 @@ yarn add @d3charts/react
 ## Quick start
 
 ```tsx
-import { BarChart } from '@d3charts/react'
+import { BarChart } from '@firebird1998/d3charts-react'
 
 const data = [
   { month: 'Jan', sales: 30 },
@@ -75,7 +75,7 @@ function App() {
 ### Responsive bar chart
 
 ```tsx
-import { useResizeObserver, BarChart } from '@d3charts/react'
+import { useResizeObserver, BarChart } from '@firebird1998/d3charts-react'
 
 function ResponsiveBarChart({ data }) {
   const [ref, dims] = useResizeObserver<HTMLDivElement>()
@@ -99,7 +99,7 @@ function ResponsiveBarChart({ data }) {
 ### Multi-series line chart
 
 ```tsx
-import { LineChart } from '@d3charts/react'
+import { LineChart } from '@firebird1998/d3charts-react'
 ;<LineChart
   series={[
     {
@@ -127,7 +127,7 @@ import { LineChart } from '@d3charts/react'
 ### Donut chart
 
 ```tsx
-import { PieChart } from '@d3charts/react'
+import { PieChart } from '@firebird1998/d3charts-react'
 ;<PieChart
   data={[
     { label: 'React', value: 40 },

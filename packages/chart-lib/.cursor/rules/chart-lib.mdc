@@ -1,9 +1,9 @@
 ---
-description: Rules and patterns for the @d3charts/react chart library
+description: Rules and patterns for the @firebird1998/d3charts-react chart library
 globs: packages/chart-lib/**/*
 ---
 
-# @d3charts/react — AI coding rules
+# @firebird1998/d3charts-react — AI coding rules
 
 ## Architecture principles
 

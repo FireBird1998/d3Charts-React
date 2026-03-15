@@ -24,6 +24,11 @@ $d3c-legend-font-size: var(--d3c-legend-font-size, 11px);
 $d3c-legend-font-weight: var(--d3c-legend-font-weight, 500);
 $d3c-legend-color: var(--d3c-legend-color, #374151);
 
+// Axis labels
+$d3c-axis-label-font-size: var(--d3c-axis-label-font-size, 12px);
+$d3c-axis-label-font-weight: var(--d3c-axis-label-font-weight, 500);
+$d3c-axis-label-color: var(--d3c-axis-label-color, #374151);
+
 // Chart background
 $d3c-chart-bg: var(--d3c-chart-bg, transparent);
 

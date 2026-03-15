@@ -1,6 +1,6 @@
 # Architecture
 
-> Design philosophy, layer structure, data flow, and conventions for `@d3charts/react`.
+> Design philosophy, layer structure, data flow, and conventions for `@firebird1998/d3charts-react`.
 
 ## Design philosophy
 

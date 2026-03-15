@@ -31,7 +31,7 @@ interface Dimensions {
 ### Usage
 
 ```tsx
-import { useResizeObserver, BarChart } from '@d3charts/react'
+import { useResizeObserver, BarChart } from '@firebird1998/d3charts-react'
 
 function ResponsiveBarChart() {
   const [ref, dims] = useResizeObserver<HTMLDivElement>()

@@ -5,7 +5,7 @@ An accessible multi-series line chart with configurable curve interpolation, dat
 ## Usage
 
 ```tsx
-import { LineChart } from '@d3charts/react'
+import { LineChart } from '@firebird1998/d3charts-react'
 
 const series = [
   {

@@ -50,6 +50,14 @@ export interface ChartTheme {
   /** Radius of data point circles */
   pointRadius: string
 
+  /** --- Axis labels --- */
+  /** Font size for axis labels (x-axis and y-axis titles) */
+  axisLabelFontSize: string
+  /** Font weight for axis labels */
+  axisLabelFontWeight: string
+  /** Fill color for axis labels */
+  axisLabelColor: string
+
   /** --- Pie chart --- */
   /** Stroke color between pie slices */
   pieStrokeColor: string
@@ -90,6 +98,9 @@ export const cssVarNames: Record<keyof Omit<ChartTheme, 'palette'>, string> = {
   legendFontWeight: '--d3c-legend-font-weight',
   legendColor: '--d3c-legend-color',
   chartBackground: '--d3c-chart-bg',
+  axisLabelFontSize: '--d3c-axis-label-font-size',
+  axisLabelFontWeight: '--d3c-axis-label-font-weight',
+  axisLabelColor: '--d3c-axis-label-color',
   barBorderRadius: '--d3c-bar-border-radius',
   lineStrokeWidth: '--d3c-line-stroke-width',
   pointRadius: '--d3c-point-radius',

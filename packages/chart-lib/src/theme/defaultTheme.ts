@@ -18,6 +18,10 @@ export const lightTheme: ChartTheme = {
   legendFontWeight: '500',
   legendColor: '#374151',
 
+  axisLabelFontSize: '12px',
+  axisLabelFontWeight: '500',
+  axisLabelColor: '#374151',
+
   chartBackground: 'transparent',
 
   palette: [

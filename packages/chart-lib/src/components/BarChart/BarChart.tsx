@@ -2,6 +2,7 @@
 
 import { scaleBand, scaleLinear } from 'd3-scale'
 import { stack as d3stack } from 'd3-shape'
+import type { Series } from 'd3-shape'
 import { max as d3max } from 'd3-array'
 import { DEFAULT_MARGIN } from '../../types'
 import type { Margin } from '../../types'
@@ -38,6 +39,10 @@ export interface BarChartProps<
   xTickFormat?: (value: string | number) => string
   /** Formatter for y-axis tick labels */
   yTickFormat?: (value: string | number) => string
+  /** Label for the x-axis */
+  xAxisLabel?: string
+  /** Label for the y-axis */
+  yAxisLabel?: string
 }
 
 function getColor(
@@ -65,6 +70,8 @@ export function BarChart<
   className,
   xTickFormat,
   yTickFormat,
+  xAxisLabel,
+  yAxisLabel,
 }: BarChartProps<D>) {
   const theme = useChartTheme()
   const innerWidth = width - margin.left - margin.right
@@ -83,111 +90,94 @@ export function BarChart<
   const showLegend = keys.length > 1
   const rx = Number(theme.barBorderRadius)
 
-  if (mode === 'stacked') {
-    // --- Stacked mode ---
-    const stackGenerator = d3stack<D, string>().keys(keys)
-    const stackedData = stackGenerator(data)
-
-    const yMax = d3max(stackedData, (layer) => d3max(layer, (d) => d[1])) ?? 0
-
-    const yScale = scaleLinear().domain([0, yMax]).range([innerHeight, 0]).nice()
-
-    const yTicks = getLinearTicks(yScale)
-
-    return (
-      <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
-        <desc>{ariaLabel}</desc>
-        <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <AxisLeft
-            ticks={yTicks}
-            width={innerWidth}
-            height={innerHeight}
-            tickFormat={yTickFormat}
-          />
-          <AxisBottom
-            ticks={xTicks}
-            height={innerHeight}
-            width={innerWidth}
-            tickFormat={xTickFormat}
-          />
-          {stackedData.map((layer) => (
-            <g key={layer.key} fill={colorMap[layer.key]}>
-              {layer.map((segment, i) => {
-                const category = String(data[i][categoryKey])
-                const x = xScale(category) ?? 0
-                const y0 = yScale(segment[0])
-                const y1 = yScale(segment[1])
-                return (
-                  <rect
-                    key={category}
-                    x={x}
-                    y={y1}
-                    width={xScale.bandwidth()}
-                    height={y0 - y1}
-                    rx={rx}
-                  >
-                    <title>{`${category} — ${layer.key}: ${segment[1] - segment[0]}`}</title>
-                  </rect>
-                )
-              })}
-            </g>
-          ))}
-          {showLegend && (
-            <Legend
-              items={keys.map((key) => ({ key, color: colorMap[key] }))}
-              x={innerWidth - keys.length * 90}
-              y={-margin.top + 4}
-            />
-          )}
-        </g>
-      </svg>
-    )
-  }
-
-  // --- Grouped mode (default) ---
+  let yMax: number
+  let stackedData: Series<D, string>[] | null = null
   const xSubScale = scaleBand<string>().domain(keys).range([0, xScale.bandwidth()]).padding(0.05)
 
-  const yMax = d3max(data, (d) => d3max(keys, (key) => Number(d[key]) || 0)) ?? 0
+  if (mode === 'stacked') {
+    const stackGenerator = d3stack<D, string>().keys(keys)
+    stackedData = stackGenerator(data)
+    yMax = d3max(stackedData, (layer) => d3max(layer, (d) => d[1])) ?? 0
+  } else {
+    yMax = d3max(data, (d) => d3max(keys, (key) => Number(d[key]) || 0)) ?? 0
+  }
 
   const yScale = scaleLinear().domain([0, yMax]).range([innerHeight, 0]).nice()
-
   const yTicks = getLinearTicks(yScale)
+
+  function renderStackedBars() {
+    if (!stackedData) return null
+    return stackedData.map((layer) => (
+      <g key={layer.key} fill={colorMap[layer.key]}>
+        {layer.map((segment, i) => {
+          const category = String(data[i][categoryKey])
+          const x = xScale(category) ?? 0
+          const y0 = yScale(segment[0])
+          const y1 = yScale(segment[1])
+          return (
+            <rect key={category} x={x} y={y1} width={xScale.bandwidth()} height={y0 - y1} rx={rx}>
+              <title>{`${category} — ${layer.key}: ${segment[1] - segment[0]}`}</title>
+            </rect>
+          )
+        })}
+      </g>
+    ))
+  }
+
+  function renderGroupedBars() {
+    return data.map((d) => {
+      const category = String(d[categoryKey])
+      const groupX = xScale(category) ?? 0
+      return (
+        <g key={category} transform={`translate(${groupX}, 0)`}>
+          {keys.map((key) => {
+            const value = Number(d[key]) || 0
+            return (
+              <rect
+                key={key}
+                x={xSubScale(key)}
+                y={yScale(value)}
+                width={xSubScale.bandwidth()}
+                height={innerHeight - yScale(value)}
+                fill={colorMap[key]}
+                rx={rx}
+              >
+                <title>{`${category} — ${key}: ${value}`}</title>
+              </rect>
+            )
+          })}
+        </g>
+      )
+    })
+  }
 
   return (
     <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
       <desc>{ariaLabel}</desc>
+      <rect width={width} height={height} fill={theme.chartBackground} aria-hidden="true" />
       <g transform={`translate(${margin.left}, ${margin.top})`}>
-        <AxisLeft ticks={yTicks} width={innerWidth} height={innerHeight} />
-        <AxisBottom ticks={xTicks} height={innerHeight} width={innerWidth} />
-        {data.map((d) => {
-          const category = String(d[categoryKey])
-          const groupX = xScale(category) ?? 0
-          return (
-            <g key={category} transform={`translate(${groupX}, 0)`}>
-              {keys.map((key) => {
-                const value = Number(d[key]) || 0
-                return (
-                  <rect
-                    key={key}
-                    x={xSubScale(key)}
-                    y={yScale(value)}
-                    width={xSubScale.bandwidth()}
-                    height={innerHeight - yScale(value)}
-                    fill={colorMap[key]}
-                    rx={rx}
-                  >
-                    <title>{`${category} — ${key}: ${value}`}</title>
-                  </rect>
-                )
-              })}
-            </g>
-          )
-        })}
+        <AxisLeft
+          ticks={yTicks}
+          width={innerWidth}
+          height={innerHeight}
+          tickFormat={yTickFormat}
+          label={yAxisLabel}
+          labelOffset={margin.left - 10}
+        />
+        <AxisBottom
+          ticks={xTicks}
+          height={innerHeight}
+          width={innerWidth}
+          tickFormat={xTickFormat}
+          label={xAxisLabel}
+          labelOffset={margin.bottom - 6}
+        />
+        {mode === 'stacked' ? renderStackedBars() : renderGroupedBars()}
         {showLegend && (
           <Legend
             items={keys.map((key) => ({ key, color: colorMap[key] }))}
-            x={innerWidth - keys.length * 90}
-            y={-margin.top + 4}
+            innerWidth={innerWidth}
+            marginTop={margin.top}
           />
         )}
       </g>
