@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@d3charts/react": "workspace:*",
+    "@firebird1998/d3charts-react": "workspace:*",
     "next": "^15.0.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"

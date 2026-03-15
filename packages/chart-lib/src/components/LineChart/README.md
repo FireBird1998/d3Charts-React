@@ -1,6 +1,6 @@
 # LineChart
 
-An accessible multi-series line chart with optional smooth curves, data-point circles, and automatic extent calculation.
+An accessible multi-series line chart with configurable curve interpolation, data-point circles, and automatic extent calculation.
 
 ## Usage
 
@@ -35,23 +35,33 @@ const series = [
 
 ## Props — `LineChartProps`
 
-| Prop        | Type           | Default                                        | Description                              |
-| ----------- | -------------- | ---------------------------------------------- | ---------------------------------------- |
-| `series`    | `LineSeries[]` | —                                              | Array of line series to render           |
-| `width`     | `number`       | —                                              | SVG width in pixels                      |
-| `height`    | `number`       | —                                              | SVG height in pixels                     |
-| `margin`    | `Margin`       | `{ top: 20, right: 20, bottom: 40, left: 50 }` | Margins around the chart area            |
-| `smooth`    | `boolean`      | `true`                                         | Use `curveMonotoneX` for smooth curves   |
-| `ariaLabel` | `string`       | `'Line chart'`                                 | Accessible label for the `<svg>` element |
+| Prop          | Type                                  | Default                                        | Description                                                            |
+| ------------- | ------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------- |
+| `series`      | `LineSeries[]`                        | —                                              | Array of line series to render                                         |
+| `width`       | `number`                              | —                                              | SVG width in pixels                                                    |
+| `height`      | `number`                              | —                                              | SVG height in pixels                                                   |
+| `margin`      | `Margin`                              | `{ top: 20, right: 20, bottom: 40, left: 50 }` | Margins around the chart area                                          |
+| `curve`       | `CurveType`                           | `'monotoneX'`                                  | Curve interpolation (`'linear'`, `'monotoneX'`, `'natural'`, `'step'`) |
+| `colors`      | `Record<string, string>`              | —                                              | Per-series colors keyed by series id                                   |
+| `ariaLabel`   | `string`                              | `'Line chart'`                                 | Accessible label for the `<svg>` element                               |
+| `className`   | `string`                              | —                                              | Custom CSS class name for the SVG element                              |
+| `xTickFormat` | `(value: string \| number) => string` | —                                              | Formatter for x-axis tick labels                                       |
+| `yTickFormat` | `(value: string \| number) => string` | —                                              | Formatter for y-axis tick labels                                       |
+
+### Color precedence
+
+1. `series[].color` — inline per-series override (highest priority)
+2. `colors[series.id]` — prop-level keyed map
+3. Theme palette — automatic fallback by index
 
 ## Internal architecture
 
 1. **Compute dimensions** — `innerWidth` / `innerHeight` from outer size and margins.
 2. **Calculate extents** — `getLineExtent(allData, accessor)` finds `[min, max]` for both x and y across all series.
 3. **Build scales** — Two `scaleLinear` instances for x and y, both with `.nice()`.
-4. **Create line generator** — `d3-shape`'s `line()` maps data points to SVG path data. When `smooth` is true, `curveMonotoneX` is applied.
+4. **Create line generator** — `d3-shape`'s `line()` maps data points to SVG path data. The `curve` prop selects the interpolation function.
 5. **Generate ticks** — `getLinearTicks` for both axes.
-6. **Render SVG** — `<AxisLeft>`, `<AxisBottom>`, a `<path>` per series, and `<circle>` elements at each data point with `<title>` tooltips.
+6. **Render SVG** — `<AxisLeft>`, `<AxisBottom>`, a `<path>` per series, `<circle>` elements at each data point with `<title>` tooltips, and a `<Legend>` when multiple series are present.
 
 ## Accessibility
 

@@ -539,3 +539,11 @@ describe('BarChart — multiple theme providers', () => {
     expect(styles?.length).toBeGreaterThanOrEqual(2)
   })
 })
+
+describe('BarChart — className prop', () => {
+  it('applies className to the SVG element', () => {
+    renderBarChart({ className: 'my-chart' })
+    const svg = screen.getByRole('img')
+    expect(svg).toHaveClass('my-chart')
+  })
+})

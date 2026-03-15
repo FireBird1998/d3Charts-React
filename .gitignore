@@ -4,3 +4,8 @@ dist
 .turbo
 *.tsbuildinfo
 storybook-static
+
+CLAUDE.md
+ARCHITECTURE.md
+docs/adr/
+.claude/

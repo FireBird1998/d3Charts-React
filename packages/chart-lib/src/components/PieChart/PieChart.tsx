@@ -22,8 +22,12 @@ export interface PieChartProps {
   colors?: string[]
   /** Whether to show labels on slices */
   showLabels?: boolean
+  /** Minimum arc angle (radians) for showing a label */
+  minLabelAngle?: number
   /** Accessible label describing the chart */
   ariaLabel?: string
+  /** Custom CSS class name for the SVG element */
+  className?: string
 }
 
 export function PieChart({
@@ -35,7 +39,9 @@ export function PieChart({
   cornerRadius = 2,
   colors,
   showLabels = true,
+  minLabelAngle = 0.3,
   ariaLabel = 'Pie chart',
+  className,
 }: PieChartProps) {
   const theme = useChartTheme()
   const palette = colors ?? theme.palette
@@ -58,7 +64,7 @@ export function PieChart({
   const arcs = pieGenerator(data)
 
   return (
-    <svg width={width} height={height} role="img" aria-label={ariaLabel}>
+    <svg width={width} height={height} role="img" aria-label={ariaLabel} className={className}>
       <desc>{ariaLabel}</desc>
       <g transform={`translate(${width / 2}, ${height / 2})`}>
         {arcs.map((d, i) => {
@@ -73,15 +79,12 @@ export function PieChart({
               >
                 <title>{`${d.data.label}: ${d.data.value}`}</title>
               </path>
-              {showLabels && d.endAngle - d.startAngle > 0.3 && (
+              {showLabels && d.endAngle - d.startAngle > minLabelAngle && (
                 <text
                   transform={`translate(${labelArc.centroid(d)})`}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fill={theme.pieLabelColor}
-                  fontSize={theme.pieLabelFontSize}
-                  fontWeight={theme.pieLabelFontWeight}
-                  pointerEvents="none"
+                  className="d3c-pie-label"
                 >
                   {d.data.label}
                 </text>

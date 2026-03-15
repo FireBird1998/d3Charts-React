@@ -5,9 +5,10 @@ export { PieChart } from './components/PieChart/PieChart'
 
 // Types
 export type { BarChartProps } from './components/BarChart/BarChart'
-export type { LineChartProps } from './components/LineChart/LineChart'
+export type { LineChartProps, CurveType } from './components/LineChart/LineChart'
 export type { PieChartProps } from './components/PieChart/PieChart'
 export type { DataPoint, LineDataPoint, LineSeries, Margin, ChartDimensions } from './types'
+export { DEFAULT_MARGIN } from './types'
 
 // Theme
 export { ChartThemeProvider } from './theme/ChartThemeProvider'
@@ -18,3 +19,4 @@ export type { ChartTheme, ChartThemeProviderProps } from './theme/tokens'
 
 // Hooks
 export { useResizeObserver } from './hooks/useResizeObserver'
+export type { Dimensions } from './hooks/useResizeObserver'

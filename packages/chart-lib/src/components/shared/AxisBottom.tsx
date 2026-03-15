@@ -6,9 +6,11 @@ interface AxisBottomProps {
   height: number
   /** The full inner width of the chart area (used for the axis line length) */
   width: number
+  /** Optional formatter for tick label values */
+  tickFormat?: (value: string | number) => string
 }
 
-export function AxisBottom({ ticks, height, width }: AxisBottomProps) {
+export function AxisBottom({ ticks, height, width, tickFormat }: AxisBottomProps) {
   return (
     <g transform={`translate(0, ${height})`}>
       <line x1={0} x2={width} className="d3c-axis-line" />
@@ -16,7 +18,7 @@ export function AxisBottom({ ticks, height, width }: AxisBottomProps) {
         <g key={String(value)} transform={`translate(${offset}, 0)`}>
           <line y2={6} className="d3c-tick-line" />
           <text y={9} dy="0.71em" textAnchor="middle" className="d3c-tick-text">
-            {String(value)}
+            {tickFormat ? tickFormat(value) : String(value)}
           </text>
         </g>
       ))}

@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart, LineChart } from '@d3charts/react'
+import { BarChart, LineChart } from '@firebird1998/d3charts-react'
 
 const barData = [
   { label: 'Jan', value: 30 },
@@ -48,7 +48,7 @@ export default function Home() {
         D3Charts — Next.js Demo
       </h1>
       <p style={{ color: '#666', marginBottom: '2rem' }}>
-        Server-side rendered page consuming <code>@d3charts/react</code> with{' '}
+        Server-side rendered page consuming <code>@firebird1998/d3charts-react</code> with{' '}
         <code>&quot;use client&quot;</code>
       </p>
 
@@ -62,7 +62,7 @@ export default function Home() {
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           }}
         >
-          <BarChart data={barData} width={700} height={400} />
+          <BarChart data={barData} keys={['value']} categoryKey="label" width={700} height={400} />
         </div>
       </section>
 

@@ -4,13 +4,19 @@ import { LineChart } from './LineChart'
 const meta: Meta<typeof LineChart> = {
   title: 'Charts/LineChart',
   component: LineChart,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },
   argTypes: {
-    smooth: { control: 'boolean' },
+    curve: {
+      control: 'select',
+      options: ['linear', 'monotoneX', 'natural', 'step'],
+    },
     width: { control: { type: 'range', min: 200, max: 1000, step: 50 } },
     height: { control: { type: 'range', min: 150, max: 600, step: 50 } },
+    series: { table: { disable: true } },
+    margin: { table: { disable: true } },
   },
 }
 
@@ -80,7 +86,7 @@ export const StraightLines: Story = {
     series: singleSeries,
     width: 600,
     height: 400,
-    smooth: false,
+    curve: 'linear' as const,
   },
 }
 
@@ -89,5 +95,39 @@ export const SmallChart: Story = {
     series: singleSeries,
     width: 300,
     height: 200,
+  },
+}
+
+const multiSeriesNoColor = [
+  {
+    id: 'revenue',
+    data: [
+      { x: 0, y: 10 },
+      { x: 1, y: 25 },
+      { x: 2, y: 18 },
+      { x: 3, y: 35 },
+      { x: 4, y: 28 },
+      { x: 5, y: 42 },
+    ],
+  },
+  {
+    id: 'expenses',
+    data: [
+      { x: 0, y: 15 },
+      { x: 1, y: 12 },
+      { x: 2, y: 22 },
+      { x: 3, y: 20 },
+      { x: 4, y: 30 },
+      { x: 5, y: 25 },
+    ],
+  },
+]
+
+export const CustomColors: Story = {
+  args: {
+    series: multiSeriesNoColor,
+    width: 600,
+    height: 400,
+    colors: { revenue: '#e63946', expenses: '#457b9d' },
   },
 }

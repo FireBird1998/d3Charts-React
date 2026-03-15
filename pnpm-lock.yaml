@@ -117,7 +117,7 @@ importers:
 
   packages/nextjs-app:
     dependencies:
-      '@d3charts/react':
+      '@firebird1998/d3charts-react':
         specifier: workspace:*
         version: link:../chart-lib
       next:
@@ -145,7 +145,7 @@ importers:
 
   packages/vite-app:
     dependencies:
-      '@d3charts/react':
+      '@firebird1998/d3charts-react':
         specifier: workspace:*
         version: link:../chart-lib
       react:

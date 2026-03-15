@@ -1,4 +1,4 @@
-import { BarChart, LineChart } from '@d3charts/react'
+import { BarChart, LineChart } from '@firebird1998/d3charts-react'
 
 const barData = [
   { label: 'Jan', value: 30 },
@@ -46,7 +46,8 @@ export function App() {
         D3Charts Demo
       </h1>
       <p style={{ color: '#666', marginBottom: '2rem' }}>
-        React components powered by D3.js math — consumed via <code>@d3charts/react</code>
+        React components powered by D3.js math — consumed via{' '}
+        <code>@firebird1998/d3charts-react</code>
       </p>
 
       <section style={{ marginBottom: '3rem' }}>
@@ -59,7 +60,7 @@ export function App() {
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           }}
         >
-          <BarChart data={barData} width={700} height={400} />
+          <BarChart data={barData} keys={['value']} categoryKey="label" width={700} height={400} />
         </div>
       </section>
 

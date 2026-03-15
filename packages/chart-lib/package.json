@@ -1,6 +1,26 @@
 {
-  "name": "@d3charts/react",
-  "version": "0.0.1",
+  "name": "@firebird1998/d3charts-react",
+  "version": "0.1.0",
+  "description": "React charting library powered by D3 — BarChart, LineChart, PieChart with TypeScript support",
+  "license": "MIT",
+  "author": "Ankit Das (FireBird1998)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FireBird1998/d3Charts-React.git",
+    "directory": "packages/chart-lib"
+  },
+  "homepage": "https://github.com/FireBird1998/d3Charts-React",
+  "keywords": [
+    "react",
+    "d3",
+    "charts",
+    "bar-chart",
+    "line-chart",
+    "pie-chart",
+    "data-visualization",
+    "svg",
+    "typescript"
+  ],
   "type": "module",
   "exports": {
     ".": {

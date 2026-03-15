@@ -39,4 +39,12 @@ export const BASE_STYLES = `
   font-weight: var(--d3c-legend-font-weight, 500);
   fill: var(--d3c-legend-color, #374151);
 }
+
+.d3c-pie-label {
+  font-family: var(--d3c-font-family, 'Inter', 'Helvetica Neue', system-ui, sans-serif);
+  font-size: var(--d3c-pie-label-font-size, 12px);
+  font-weight: var(--d3c-pie-label-font-weight, 600);
+  fill: var(--d3c-pie-label-color, #ffffff);
+  pointer-events: none;
+}
 `.trim()
